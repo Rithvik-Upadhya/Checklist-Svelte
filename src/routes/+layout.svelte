@@ -33,7 +33,6 @@
 	let newListBtn;
 	let newListInput;
 	let email = '';
-	let captchaToken = '';
 
 	async function handleListCreation(event) {
 		if (creatingNewList) return;
@@ -66,8 +65,7 @@
 
 	async function handleEmailSignIn() {
 		const { error } = await supabase.auth.signInWithOtp({
-			email,
-			options: { captchaToken }
+			email
 		});
 		if (error) {
 			console.error('Error sending magic link:', error);
@@ -78,16 +76,14 @@
 
 	async function handleGoogleSignIn() {
 		const { error } = await supabase.auth.signInWithOAuth({
-			provider: 'google',
-			options: { captchaToken }
+			provider: 'google'
 		});
 		if (error) console.error('Error signing in with Google:', error);
 	}
 
 	async function handleGitHubSignIn() {
 		const { error } = await supabase.auth.signInWithOAuth({
-			provider: 'github',
-			options: { captchaToken }
+			provider: 'github'
 		});
 		if (error) console.error('Error signing in with GitHub:', error);
 	}
@@ -107,9 +103,6 @@
 		property="og:description"
 		content={$page.data.description || "What's on your to-do list?"}
 	/>
-	{#if !$user}
-		<script src="https://cdn.jsdelivr.net/npm/@hcaptcha/vanilla-hcaptcha" async defer></script>
-	{/if}
 </svelte:head>
 
 <header>
@@ -148,7 +141,7 @@
 			</div>
 			<div class="account">
 				{#if $user}
-					<p>Welcome, {$user.email}</p>
+					<p>Logged in as {$user.email}</p>
 				{:else}
 					<form class="email-signin" on:submit|preventDefault={handleEmailSignIn}>
 						<input type="email" name="email" id="email" placeholder="Email" bind:value={email} />
@@ -178,13 +171,6 @@
 							<Icon icon="bi:github" height="24" width="24" style="color: var(--textC3)" />
 						</button>
 					</div>
-					<h-captcha
-						id="signupCaptcha"
-						site-key="1d1ea68e-3a62-4812-a504-cc8edec2ca00"
-						size="invisible"
-						on:verified={(e) => (captchaToken = e.token)}
-						on:error={(e) => console.log(e.error)}
-					></h-captcha>
 				{/if}
 			</div>
 		</nav>
