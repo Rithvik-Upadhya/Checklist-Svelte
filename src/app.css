@@ -1,0 +1,120 @@
+/* Basic Styling */
+:root {
+  --fontFamily1: 'Space Grotesk', Verdana, Geneva, Tahoma, sans-serif;
+  --primaryC: #1f2937;
+  --bgC: var(--primaryC);
+  --bgC2: #273549;
+  --bgC3: #fff;
+  --textC: #fff;
+  --textC2: var(--primaryC);
+  --textC3: #b2c1d7;
+  --accentC: #47df85;
+  --bdC: #f9f9f910;
+  --bdRadius: 5px;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--fontFamily1);
+  font-size: 18px;
+  background-color: var(--bgC);
+  color: var(--textC);
+  font-weight: 300;
+}
+body > .wrapper {
+  display: flex;
+  height: 100%;
+}
+@media (min-width: 950px) {
+  body > .wrapper {
+    flex-direction: row;
+  }
+}
+@media (max-width: 949px) {
+  body > .wrapper {
+    flex-direction: column;
+  }
+}
+input,
+button {
+  font-size: 1em;
+  font-family: var(--fontFamily1);
+  border: 0;
+}
+input {
+  outline: 0;
+}
+a {
+  color: var(--textC);
+}
+/* Hide classes */
+.h {
+  display: none;
+}
+@media (min-width: 950px) {
+  .h-d {
+    display: none;
+  }
+}
+@media (min-width: 600px) and (max-width: 949px) {
+  .h-t {
+    display: none;
+  }
+}
+@media (max-width: 599px) {
+  .h-m {
+    display: none;
+  }
+}
+@media (min-width: 600px) {
+  .h-nm {
+    display: none;
+  }
+}
+@media (max-width: 949px) {
+  .h-nd {
+    display: none;
+  }
+}
+/* Fonts */
+@font-face {
+  font-display: swap;
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  src: url('/fonts/space-grotesk-v16-latin-300.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/space-grotesk-v16-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/space-grotesk-v16-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/space-grotesk-v16-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/space-grotesk-v16-latin-700.woff2') format('woff2');
+}
