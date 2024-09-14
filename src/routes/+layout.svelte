@@ -64,22 +64,7 @@
 		});
 	}
 
-	const signupCaptcha = document.getElementById('signupCaptcha');
-
-	signupCaptcha.addEventListener('verified', (e) => {
-		captchaToken = e.token;
-		console.log('verified');
-	});
-	signupCaptcha.addEventListener('error', (e) => {
-		captchaToken = '';
-		console.log('error event', { error: e.error });
-	});
-
 	async function handleEmailSignIn() {
-		if (!captchaToken) {
-			alert('Please complete the captcha first');
-			return;
-		}
 		const { error } = await supabase.auth.signInWithOtp({
 			email,
 			options: { captchaToken }
@@ -197,6 +182,8 @@
 						id="signupCaptcha"
 						site-key="1d1ea68e-3a62-4812-a504-cc8edec2ca00"
 						size="invisible"
+						on:verified={(e) => (captchaToken = e.token)}
+						on:error={(e) => console.log(e.error)}
 					></h-captcha>
 				{/if}
 			</div>
