@@ -33,6 +33,7 @@
 	let newListBtn;
 	let newListInput;
 	let email = '';
+	let captchaToken = '';
 
 	async function handleListCreation(event) {
 		if (creatingNewList) return;
@@ -63,8 +64,26 @@
 		});
 	}
 
+	const signupCaptcha = document.getElementById('signupCaptcha');
+
+	signupCaptcha.addEventListener('verified', (e) => {
+		captchaToken = e.token;
+		console.log('verified');
+	});
+	signupCaptcha.addEventListener('error', (e) => {
+		captchaToken = '';
+		console.log('error event', { error: e.error });
+	});
+
 	async function handleEmailSignIn() {
-		const { error } = await supabase.auth.signInWithOtp({ email });
+		if (!captchaToken) {
+			alert('Please complete the captcha first');
+			return;
+		}
+		const { error } = await supabase.auth.signInWithOtp({
+			email,
+			options: { captchaToken }
+		});
 		if (error) {
 			console.error('Error sending magic link:', error);
 		} else {
@@ -74,14 +93,16 @@
 
 	async function handleGoogleSignIn() {
 		const { error } = await supabase.auth.signInWithOAuth({
-			provider: 'google'
+			provider: 'google',
+			options: { captchaToken }
 		});
 		if (error) console.error('Error signing in with Google:', error);
 	}
 
 	async function handleGitHubSignIn() {
 		const { error } = await supabase.auth.signInWithOAuth({
-			provider: 'github'
+			provider: 'github',
+			options: { captchaToken }
 		});
 		if (error) console.error('Error signing in with GitHub:', error);
 	}
@@ -153,11 +174,6 @@
 						>
 							<Icon icon="solar:square-arrow-right-bold" height="30" width="30" />
 						</button>
-						<h-captcha
-							id="signupCaptcha"
-							site-key="1d1ea68e-3a62-4812-a504-cc8edec2ca00"
-							size="invisible"
-						></h-captcha>
 					</form>
 					<div class="social-signins">
 						<button
@@ -177,6 +193,11 @@
 							<Icon icon="bi:github" height="24" width="24" style="color: var(--textC3)" />
 						</button>
 					</div>
+					<h-captcha
+						id="signupCaptcha"
+						site-key="1d1ea68e-3a62-4812-a504-cc8edec2ca00"
+						size="invisible"
+					></h-captcha>
 				{/if}
 			</div>
 		</nav>
