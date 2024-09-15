@@ -79,9 +79,15 @@
 </script>
 
 <div class="account">
-	{#if $user?.is_authenticated}
-		<p>Logged in as {$user.is_authenticated}</p>
-		<button on:click={handleSignOut}>Sign out</button>
+	{#if $user}
+		<div class="user-email">
+			<span title={$user?.email}>
+				{$user?.email}
+			</span>
+			<button class="sign-out" on:click={handleSignOut} title="Sign out" aria-label="Sign out">
+				<Icon icon="ic:round-logout" height="24" width="24" />
+			</button>
+		</div>
 	{:else}
 		<form class="email-signin" on:submit|preventDefault={handleEmailSignIn}>
 			<input
@@ -132,6 +138,35 @@
 		border-top: 1px solid var(--bdC);
 		padding-top: 20px;
 		margin-top: 20px;
+
+		.user-email {
+			width: 100%;
+			background-color: var(--bgC2);
+			border-radius: var(--bdRadius);
+			border: 1px solid var(--bdC);
+			font-size: 0.9em;
+			color: var(--textC3);
+			font-weight: 500;
+
+			display: flex;
+			align-items: center;
+
+			span {
+				border-right: 1px solid var(--bdC);
+				padding: 10px 15px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				flex-grow: 1;
+			}
+
+			.sign-out {
+				padding: 10px 15px;
+				display: flex;
+				background-color: transparent;
+				color: var(--textC3);
+				cursor: pointer;
+			}
+		}
 
 		form.email-signin {
 			display: flex;

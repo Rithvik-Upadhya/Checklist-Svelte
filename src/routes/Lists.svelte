@@ -150,7 +150,6 @@
 			font-weight: 600;
 
 			&.selected,
-			&.active,
 			&:hover,
 			&:focus-within {
 				background-color: var(--bgC2);
