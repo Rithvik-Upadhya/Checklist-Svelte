@@ -38,7 +38,7 @@
 			return;
 		}
 		if ($user) {
-			const { error } = await supabase.from('lists').insert({ name, user_id: $user.id });
+			const { error } = await supabase.from('checklists').insert({ name, user_id: $user.id });
 			if (error) console.error('Error saving list:', error);
 		} else {
 			lists = [...lists, name];
@@ -57,7 +57,6 @@
 		event.stopPropagation();
 
 		const handleOutsideClick = (e) => {
-			console.log('clicked');
 			if (!newListBtn.contains(e.target)) {
 				creatingNewList = false;
 				removeEventListeners();
@@ -101,7 +100,7 @@
 </script>
 
 <div class="lists">
-	{#each lists as list, index (list)}
+	{#each lists as list (list)}
 		<button
 			type="button"
 			class="list-item"
