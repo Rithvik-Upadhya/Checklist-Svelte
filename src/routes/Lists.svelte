@@ -3,13 +3,12 @@
 	import Icon from '@iconify/svelte';
 	import { toastStore } from '$lib/stores/toast';
 	import { user } from '$lib/stores/authStore';
-	import { lists } from '$lib/stores/listStore';
+	import { lists, selectedList } from '$lib/stores/listStore';
 
 	let creatingNewList = false;
 	let newListName = '';
 	let newListBtn;
 	let newListInput;
-	let selectedList;
 
 	$: if ($user) {
 		lists.load($user.id);
@@ -19,7 +18,7 @@
 
 	async function saveList(name) {
 		// Check if the list name already exists
-		if ($lists.includes(name)) {
+		if ($lists.some((list) => list.name === name)) {
 			toastStore.error('A list with this name already exists.');
 			return;
 		}
@@ -79,14 +78,14 @@
 </script>
 
 <div class="lists">
-	{#each $lists as list (list)}
+	{#each $lists as list (list.id)}
 		<button
 			type="button"
 			class="list-item"
-			class:selected={selectedList === list}
-			on:click={() => (selectedList = list)}
+			class:selected={list?.id === $selectedList?.id}
+			on:click={() => ($selectedList = list)}
 		>
-			{list}
+			{list.name}
 		</button>
 	{/each}
 	<button type="button" class="new-list" on:click={handleListCreation} bind:this={newListBtn}>

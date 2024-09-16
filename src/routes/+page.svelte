@@ -1,10 +1,15 @@
 <script>
 	import Checklist from './Checklist.svelte';
+	import { selectedList } from '$lib/stores/listStore';
 </script>
 
 <h1 id="title">What's on your <br /><span>to-do list? </span></h1>
 
-<Checklist />
+{#if $selectedList}
+	<Checklist />
+{:else}
+	<p>Select a list to get started.</p>
+{/if}
 
 <style lang="less">
 	h1 {

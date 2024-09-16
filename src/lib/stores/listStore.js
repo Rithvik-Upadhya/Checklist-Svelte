@@ -2,6 +2,9 @@ import { writable } from 'svelte/store';
 import { supabase } from '$lib/supabaseClient';
 import { browser } from '$app/environment';
 
+export const selectedList = writable(null);
+export const lists = createListsStore();
+
 function createListsStore() {
     const { subscribe, set, update } = writable([]);
 
@@ -11,13 +14,12 @@ function createListsStore() {
             if (user_id) {
                 const { data, error } = await supabase
                     .from('checklists')
-                    .select('name')
+                    .select()
                     .eq('user_id', user_id);
                 if (error) {
                     console.error('Error loading lists:', error);
                 } else {
-                    console.log('lists', data);
-                    set(data.map(item => item.name));
+                    set(data);
                 }
             } else {
                 if (browser) {
@@ -27,18 +29,20 @@ function createListsStore() {
         },
         add: async (name, user_id) => {
             if (user_id) {
-                const { error } = await supabase
+                const { data, error } = await supabase
                     .from('checklists')
-                    .insert({ name, user_id });
+                    .insert({ name, user_id })
+                    .select();
                 if (error) {
                     console.error('Error saving list:', error);
                 } else {
-                    update(lists => [...lists, name]);
+                    update(lists => [...lists, data[0]]);
                 }
             } else {
                 if (browser) {
                     update(lists => {
-                        const newLists = [...lists, name];
+                        const newList = { id: crypto.randomUUID(), created_at: new Date().toISOString(), name, last_updated: new Date().toISOString() };
+                        const newLists = [...lists, newList];
                         localStorage.setItem('lists', JSON.stringify(newLists));
                         return newLists;
                     });
@@ -47,5 +51,3 @@ function createListsStore() {
         }
     };
 }
-
-export const lists = createListsStore();
