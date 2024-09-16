@@ -2,49 +2,27 @@
 	import { tick } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import { toastStore } from '$lib/stores/toast';
-	import { supabase } from '$lib/supabaseClient';
-	import { user } from '$lib/stores/auth';
+	import { listStore } from '$lib/stores/list';
 	import { onMount } from 'svelte';
 
 	let creatingNewList = false;
 	let newListName = '';
 	let newListBtn;
 	let newListInput;
-	let lists = [];
 	let selectedList;
 
 	// Load lists on component mount
 	onMount(async () => {
-		await loadLists();
+		await listStore.load();
 	});
-
-	async function loadLists() {
-		if ($user) {
-			const { data, error } = await supabase
-				.from('checklists')
-				.select('name')
-				.eq('user_id', $user.id);
-			if (error) console.error('Error loading lists:', error);
-			else lists = data.map((item) => item.name);
-		} else {
-			lists = JSON.parse(localStorage.getItem('lists') || '[]');
-		}
-	}
 
 	async function saveList(name) {
 		// Check if the list name already exists
-		if (lists.includes(name)) {
+		if ($listStore.includes(name)) {
 			toastStore.error('A list with this name already exists.');
 			return;
 		}
-		if ($user) {
-			const { error } = await supabase.from('checklists').insert({ name, user_id: $user.id });
-			if (error) console.error('Error saving list:', error);
-		} else {
-			lists = [...lists, name];
-			localStorage.setItem('lists', JSON.stringify(lists));
-		}
-		await loadLists();
+		await listStore.add(name);
 	}
 
 	async function handleListCreation(event) {
@@ -65,18 +43,18 @@
 
 		const handlePlusClick = async () => {
 			if (newListName.trim()) {
+				creatingNewList = false;
 				await saveList(newListName.trim());
 				newListName = '';
-				creatingNewList = false;
 				removeEventListeners();
 			}
 		};
 
 		const handleEnterKey = async (e) => {
 			if (e.key === 'Enter' && newListName.trim()) {
+				creatingNewList = false;
 				await saveList(newListName.trim());
 				newListName = '';
-				creatingNewList = false;
 				removeEventListeners();
 			}
 		};
@@ -100,7 +78,7 @@
 </script>
 
 <div class="lists">
-	{#each lists as list (list)}
+	{#each $listStore as list (list)}
 		<button
 			type="button"
 			class="list-item"
