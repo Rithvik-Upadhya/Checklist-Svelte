@@ -1,33 +1,19 @@
 <script>
 	import { supabase } from '$lib/supabaseClient';
-	import { user } from '$lib/stores/auth';
-	import { onMount } from 'svelte';
+	import { user } from '$lib/stores/authStore';
 	import Icon from '@iconify/svelte';
 	import { toastStore } from '$lib/stores/toast';
 
 	let email = '';
 	let signingIn = false;
 
-	onMount(() => {
-		checkIfLoggedIn();
-
-		supabase.auth.onAuthStateChange((event, session) => {
-			if (event === 'SIGNED_IN') {
-				user.set(session.user);
-			} else if (event === 'SIGNED_OUT') {
-				user.set(null);
-			}
-		});
-	});
-
-	async function checkIfLoggedIn() {
-		const {
-			data: { session }
-		} = await supabase.auth.getSession();
-		if (session) {
+	supabase.auth.onAuthStateChange((event, session) => {
+		if (event === 'SIGNED_IN') {
 			user.set(session.user);
+		} else if (event === 'SIGNED_OUT') {
+			user.set(null);
 		}
-	}
+	});
 
 	async function handleSignOut() {
 		const { error } = await supabase.auth.signOut();

@@ -2,8 +2,8 @@
 	import { tick } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import { toastStore } from '$lib/stores/toast';
-	import { listStore } from '$lib/stores/list';
-	import { onMount } from 'svelte';
+	import { user } from '$lib/stores/authStore';
+	import { lists } from '$lib/stores/listStore';
 
 	let creatingNewList = false;
 	let newListName = '';
@@ -11,20 +11,19 @@
 	let newListInput;
 	let selectedList;
 
-	// Load lists on component mount
-	onMount(async () => {
-		await listStore.load();
-	});
-
-	$: console.log('Current listStore value:', $listStore);
+	$: if ($user) {
+		lists.load($user.id);
+	} else {
+		lists.load();
+	}
 
 	async function saveList(name) {
 		// Check if the list name already exists
-		if ($listStore.includes(name)) {
+		if ($lists.includes(name)) {
 			toastStore.error('A list with this name already exists.');
 			return;
 		}
-		await listStore.add(name);
+		lists.add(name, $user?.id);
 	}
 
 	async function handleListCreation(event) {
@@ -45,8 +44,8 @@
 
 		const handlePlusClick = async () => {
 			if (newListName.trim()) {
-				creatingNewList = false;
 				await saveList(newListName.trim());
+				creatingNewList = false;
 				newListName = '';
 				removeEventListeners();
 			}
@@ -54,8 +53,8 @@
 
 		const handleEnterKey = async (e) => {
 			if (e.key === 'Enter' && newListName.trim()) {
-				creatingNewList = false;
 				await saveList(newListName.trim());
+				creatingNewList = false;
 				newListName = '';
 				removeEventListeners();
 			}
@@ -80,7 +79,7 @@
 </script>
 
 <div class="lists">
-	{#each $listStore as list (list)}
+	{#each $lists as list (list)}
 		<button
 			type="button"
 			class="list-item"

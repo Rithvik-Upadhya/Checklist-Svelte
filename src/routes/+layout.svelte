@@ -1,5 +1,5 @@
 <script>
-	import { user } from '$lib/stores/auth';
+	import { user } from '$lib/stores/authStore';
 	import { page } from '$app/stores';
 	import Icon from '@iconify/svelte';
 
