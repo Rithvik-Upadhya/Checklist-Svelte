@@ -15,8 +15,12 @@ function createListsStore() {
                     .from('checklists')
                     .select('name')
                     .eq('user_id', currentUser.id);
-                if (error) console.error('Error loading lists:', error);
-                else set(data.map(item => item.name));
+                console.log('Loaded data:', data); // Add this line
+                if (error) {
+                    console.error('Error loading lists:', error);
+                } else {
+                    set(data.map(item => item.name));
+                }
             } else {
                 set(JSON.parse(localStorage.getItem('lists') || '[]'));
             }
@@ -27,8 +31,11 @@ function createListsStore() {
                 const { error } = await supabase
                     .from('checklists')
                     .insert({ name, user_id: currentUser.id });
-                if (error) console.error('Error saving list:', error);
-            } 
+                if (error) {
+                    console.error('Error saving list:', error);
+                    return;
+                }
+            }
             update(lists => {
                 const newLists = [...lists, name];
                 if (!currentUser) {

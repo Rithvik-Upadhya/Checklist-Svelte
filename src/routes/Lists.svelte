@@ -16,6 +16,8 @@
 		await listStore.load();
 	});
 
+	$: console.log('Current listStore value:', $listStore);
+
 	async function saveList(name) {
 		// Check if the list name already exists
 		if ($listStore.includes(name)) {
