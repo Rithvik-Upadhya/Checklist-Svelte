@@ -36,12 +36,14 @@
 	<div class="wrapper">
 		<nav>
 			<div class="branding">
-				<h1 id="title">
-					<span>
-						<img height="25" src="/favicon-green-2.png" alt="Green Checklist Logo" />
-						Checklist
-					</span>
-				</h1>
+				<a href="/" alt="Home">
+					<h1 id="title">
+						<span>
+							<img height="25" src="/favicon-green-2.png" alt="Green Checklist Logo" />
+							Checklist
+						</span>
+					</h1>
+				</a>
 				<p>No frills, just checklists.</p>
 			</div>
 			{#if isReady}
@@ -98,20 +100,22 @@
 						> p {
 							display: none;
 						}
-						h1 {
-							font-size: 1.2em;
-							margin-top: 0;
-							margin-bottom: 0;
+						a {
+							h1 {
+								font-size: 1.2em;
+								margin-top: 0;
+								margin-bottom: 0;
 
-							span {
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								gap: 10px;
-							}
+								span {
+									display: flex;
+									align-items: center;
+									justify-content: center;
+									gap: 10px;
+								}
 
-							img {
-								height: 25px;
+								img {
+									height: 25px;
+								}
 							}
 						}
 					}
@@ -120,15 +124,18 @@
 						padding-bottom: 20px;
 						margin-bottom: 20px;
 					}
-					h1 {
-						@media @s-nm {
-							font-size: 2.2em;
-							margin-top: 3px;
-							margin-bottom: 15px;
-						}
+					a {
+						text-decoration: none;
+						h1 {
+							@media @s-nm {
+								font-size: 2.2em;
+								margin-top: 3px;
+								margin-bottom: 15px;
+							}
 
-						span {
-							color: var(--accentC);
+							span {
+								color: var(--accentC);
+							}
 						}
 					}
 					p {

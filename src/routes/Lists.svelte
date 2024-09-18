@@ -166,6 +166,8 @@
 			background-color: transparent;
 			color: var(--textC);
 			cursor: pointer;
+			padding: 0;
+
 			@media @s-m {
 				display: inherit;
 			}

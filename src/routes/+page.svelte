@@ -1,11 +1,5 @@
-<script>
-	import { selectedList } from '$lib/stores/listStore';
-</script>
-
-{#if !$selectedList}
-	<h1 id="title">What's on your <br /><span>to-do list?</span></h1>
-	<p>Select a list to get started.</p>
-{/if}
+<h1 id="title">What's on your <br /><span>to-do list?</span></h1>
+<p>Select a list to get started.</p>
 
 <style lang="less">
 	h1 {
