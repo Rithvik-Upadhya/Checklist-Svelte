@@ -63,17 +63,20 @@ function createListsStore() {
                     .select();
                 if (error) {
                     console.error('Error saving list:', error);
+                    return null;
                 } else {
                     update(lists => [...lists, data[0]]);
+                    return data[0];
                 }
             } else {
                 if (browser) {
+                    const newList = { id: crypto.randomUUID(), created_at: new Date().toISOString(), name, last_updated: new Date().toISOString(), slug };
                     update(lists => {
-                        const newList = { id: crypto.randomUUID(), created_at: new Date().toISOString(), name, last_updated: new Date().toISOString(), slug };
                         const newLists = [...lists, newList];
                         localStorage.setItem('lists', JSON.stringify(newLists));
                         return newLists;
                     });
+                    return newList;
                 }
             }
         },

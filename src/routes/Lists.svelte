@@ -40,15 +40,6 @@
 		}
 	}
 
-	async function saveList(name) {
-		// Check if the list name already exists
-		if ($lists.some((list) => list.name === name)) {
-			toastStore.error('A list with this name already exists.');
-			return;
-		}
-		lists.add(name, $user?.id);
-	}
-
 	async function handleListCreation(event) {
 		if (creatingNewList) return;
 
@@ -65,34 +56,33 @@
 			}
 		};
 
-		const handlePlusClick = async () => {
-			if (newListName.trim()) {
-				removeEventListeners();
-				creatingNewList = false;
-				await saveList(newListName.trim());
-				await tick();
-				const newList = $lists.find((l) => l.name === newListName.trim());
-				if (newList) {
-					$selectedList = newList;
-					goto(`/${newList.slug}/`);
-				}
-				newListName = '';
+		async function saveList(name) {
+			if ($lists.some((list) => list.name === name)) {
+				toastStore.error('A list with this name already exists.');
+				return null;
 			}
-		};
+			return await lists.add(name, $user?.id);
+		}
 
-		const handleEnterKey = async (e) => {
-			if (e.key === 'Enter' && newListName.trim()) {
-				removeEventListeners();
-				await saveList(newListName.trim());
-				creatingNewList = false;
-				await tick();
-				const newList = $lists.find((l) => l.name === newListName.trim());
-				if (newList) {
-					$selectedList = newList;
-					goto(`/${newList.slug}/`);
-				}
+		async function handleNewList() {
+			const trimmedName = newListName.trim();
+			if (!trimmedName) return;
+
+			removeEventListeners();
+			creatingNewList = false;
+
+			const newList = await saveList(trimmedName);
+			if (newList) {
+				$selectedList = newList;
+				goto(`/${newList.slug}/`);
 				newListName = '';
 			}
+		}
+
+		const handlePlusClick = () => handleNewList();
+
+		const handleEnterKey = (e) => {
+			if (e.key === 'Enter') handleNewList();
 		};
 
 		const removeEventListeners = () => {

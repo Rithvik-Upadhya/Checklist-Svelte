@@ -1,8 +1,9 @@
 import { lists, selectedList } from '$lib/stores/listStore';
-import { user } from '$lib/stores/authStore';
+import { user, initializeUser } from '$lib/stores/authStore';
 import { get } from 'svelte/store';
 
 export async function load({ params }) {
+    await initializeUser();
     const slug = params.slug;
     if (slug) {
         const currentUser = get(user);

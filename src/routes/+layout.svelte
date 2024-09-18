@@ -1,25 +1,16 @@
 <script>
-	import { user } from '$lib/stores/authStore';
 	import { page } from '$app/stores';
-	import { supabase } from '$lib/supabaseClient';
-	import { onMount } from 'svelte';
 
 	import ToastContainer from './ToastContainer.svelte';
 	import Auth from './Auth.svelte';
 	import Lists from './Lists.svelte';
+	import { onMount } from 'svelte';
 
 	import '../app.css';
 
 	let isReady = false;
 
-	onMount(async () => {
-		// Check the initial auth state
-		const {
-			data: { session }
-		} = await supabase.auth.getSession();
-		if (session) {
-			user.set(session.user);
-		}
+	onMount(() => {
 		isReady = true;
 	});
 </script>
