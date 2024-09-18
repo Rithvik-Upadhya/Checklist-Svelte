@@ -24,7 +24,7 @@
 	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={$page.url.href} />
-	<meta property="og:image" content={$page.data.ogImage || '/favicon.png'} />
+	<meta property="og:image" content={$page.data.ogImage || '/favicon-green-2.png'} />
 	<meta
 		property="og:description"
 		content={$page.data.description || "What's on your to-do list?"}
