@@ -4,6 +4,7 @@
 	import { user } from '$lib/stores/authStore';
 	import { selectedList } from '$lib/stores/listStore';
 	import Icon from '@iconify/svelte';
+	import { goto } from '$app/navigation';
 
 	let newTask = '';
 
@@ -20,6 +21,7 @@
 	}
 
 	function deleteList() {
+		goto('/');
 		lists.delete($selectedList, $user?.id);
 		$selectedList = null;
 	}
@@ -36,14 +38,18 @@
 		<input id="new-task" type="text" bind:value={newTask} placeholder="Add a task" />
 	</form>
 	<hr />
-
-	{#each $tasks.sort((a, b) => {
-		if (a.done === b.done) {
-			return new Date(b.created_at) - new Date(a.created_at);
-		}
-		return a.done ? 1 : -1;
-	}) as task (task.id)}
-		<div id="tasks">
+	<div id="tasks">
+		{#each $tasks.sort((a, b) => {
+			if (a.done === b.done) {
+				return new Date(b.created_at) - new Date(a.created_at);
+			}
+			return a.done ? 1 : -1;
+		}) as task, index (task.id)}
+			{#if index !== 0 && $tasks[index - 1].done !== task.done}
+				{#if task.done}
+					<hr class="task-separator" />
+				{/if}
+			{/if}
 			<div class="task" class:done={task.done}>
 				<input
 					type="checkbox"
@@ -56,12 +62,12 @@
 					<Icon icon="iconamoon:close-bold" height="20" width="20" />
 				</button>
 			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 </div>
 
 <style lang="less">
-	@import '../variables.less';
+	@import '../../variables.less';
 
 	.checklist {
 		@media @s-nm {
@@ -121,6 +127,11 @@
 		}
 		#tasks {
 			width: 100%;
+
+			hr {
+				margin: 15px auto 15px 10px;
+				width: 50px;
+			}
 
 			.task {
 				display: flex;

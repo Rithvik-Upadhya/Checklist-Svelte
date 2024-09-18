@@ -4,6 +4,7 @@
 	import { toastStore } from '$lib/stores/toast';
 	import { user } from '$lib/stores/authStore';
 	import { lists, selectedList } from '$lib/stores/listStore';
+	import { goto } from '$app/navigation';
 
 	let creatingNewList = false;
 	let newListName = '';
@@ -66,19 +67,31 @@
 
 		const handlePlusClick = async () => {
 			if (newListName.trim()) {
-				await saveList(newListName.trim());
-				creatingNewList = false;
-				newListName = '';
 				removeEventListeners();
+				creatingNewList = false;
+				await saveList(newListName.trim());
+				await tick();
+				const newList = $lists.find((l) => l.name === newListName.trim());
+				if (newList) {
+					$selectedList = newList;
+					goto(`/${newList.slug}/`);
+				}
+				newListName = '';
 			}
 		};
 
 		const handleEnterKey = async (e) => {
 			if (e.key === 'Enter' && newListName.trim()) {
+				removeEventListeners();
 				await saveList(newListName.trim());
 				creatingNewList = false;
+				await tick();
+				const newList = $lists.find((l) => l.name === newListName.trim());
+				if (newList) {
+					$selectedList = newList;
+					goto(`/${newList.slug}/`);
+				}
 				newListName = '';
-				removeEventListeners();
 			}
 		};
 
@@ -118,7 +131,10 @@
 				type="button"
 				class="list-item"
 				class:selected={list?.id === $selectedList?.id}
-				on:click={() => ($selectedList = list)}
+				on:click={() => {
+					$selectedList = list;
+					goto(`/${list.slug}/`);
+				}}
 			>
 				{list.name}
 			</button>
