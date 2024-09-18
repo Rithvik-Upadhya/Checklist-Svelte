@@ -80,7 +80,7 @@
 		> .wrapper {
 			@media @s-nm {
 				border-right: 1px solid var(--bdC);
-				padding: 30px 25px;
+				padding: 30px 25px 20px 25px;
 			}
 
 			@media @s-m {
@@ -93,6 +93,10 @@
 				grid-template-rows: auto 1fr auto;
 				height: 100%;
 				position: relative;
+
+				@media @s-nm {
+					overflow-y: auto;
+				}
 
 				.branding {
 					@media @s-m {
@@ -152,6 +156,10 @@
 
 		@media @s-m {
 			padding: 0 25px 50px 25px;
+		}
+		section {
+			height: 100%;
+			overflow: auto;
 		}
 	}
 </style>

@@ -148,6 +148,11 @@
 				</button>
 			</div>
 		{/if}
+		<p class="legal">
+			<a href="/privacy">Privacy Policy</a>
+			<span>•</span>
+			<a href="/terms">Terms of Service</a>
+		</p>
 	</div>
 </div>
 
@@ -278,6 +283,18 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
+				}
+			}
+
+			.legal {
+				margin: 15px 0 0 0;
+				font-size: 0.7em;
+				opacity: 0.7;
+				color: var(--textC3);
+				text-align: center;
+
+				a {
+					color: var(--textC3);
 				}
 			}
 		}
