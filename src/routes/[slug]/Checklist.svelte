@@ -95,7 +95,6 @@
 				font-size: 1.3em;
 				display: flex;
 				align-items: center;
-				padding-bottom: 3px;
 				cursor: pointer;
 				&:hover,
 				&:focus {
@@ -180,7 +179,6 @@
 					font-size: 1.3em;
 					display: flex;
 					align-items: center;
-					padding-bottom: 3px;
 					cursor: pointer;
 
 					&:hover,
