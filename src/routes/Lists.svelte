@@ -29,6 +29,10 @@
 						isExpanded = false;
 						document.removeEventListener('click', onClick);
 					}
+					if (event.target.classList.contains('list-item')) {
+						isExpanded = false;
+						document.removeEventListener('click', onClick);
+					}
 				}
 				document.addEventListener('click', onClick);
 			}, 0);
