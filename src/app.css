@@ -31,12 +31,12 @@ body > .wrapper {
   display: flex;
   height: 100%;
 }
-@media (min-width: 950px) {
+@media (min-width: 768px) {
   body > .wrapper {
     flex-direction: row;
   }
 }
-@media (max-width: 949px) {
+@media (max-width: 767px) {
   body > .wrapper {
     flex-direction: column;
   }
@@ -62,17 +62,17 @@ a {
     display: none;
   }
 }
-@media (min-width: 600px) and (max-width: 949px) {
+@media (min-width: 768px) and (max-width: 949px) {
   .h-t {
     display: none;
   }
 }
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .h-m {
     display: none;
   }
 }
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .h-nm {
     display: none;
   }

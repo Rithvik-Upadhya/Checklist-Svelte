@@ -48,6 +48,28 @@ function createListsStore() {
                     });
                 }
             }
-        }
+        },
+        delete: async (list, user_id) => {
+            if (user_id) {
+                const { error } = await supabase
+                    .from('checklists')
+                    .delete()
+                    .eq('id', list.id)
+                    .eq('user_id', user_id);
+                if (error) {
+                    console.error('Error deleting list:', error);
+                } else {
+                    update(lists => lists.filter(l => l.id !== list.id));
+                }
+            } else {
+                if (browser) {
+                    update(lists => lists.filter(l => l.id !== list.id));
+                    localStorage.setItem('lists', JSON.stringify(lists));
+                    let allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                    allTasks = allTasks.filter(t => t.checklist_id !== list.id);
+                    localStorage.setItem('tasks', JSON.stringify(allTasks));
+                }
+            }
+        }   
     };
 }
