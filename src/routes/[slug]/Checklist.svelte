@@ -57,7 +57,10 @@
 					on:click={() => tasks.toggle(task, $user?.id)}
 					checked={task.done}
 				/>
-				<label for="task_{task.id}">{task.text}</label>
+				<label
+					for="task_{task.id}"
+					on:touchstart|preventDefault={() => tasks.toggle(task, $user?.id)}>{task.text}</label
+				>
 				<button class="delete" type="button" on:click={() => tasks.delete(task, $user?.id)}>
 					<Icon icon="iconamoon:close-bold" height="20" width="20" />
 				</button>
